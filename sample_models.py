@@ -133,7 +133,7 @@ def bidirectional_rnn_model(input_dim, units, output_dim=29):
     print(model.summary())
     return model
 
-def other_model():
+def custom_model():
     """ Build a deep network for speech 
     """
     # Main acoustic input

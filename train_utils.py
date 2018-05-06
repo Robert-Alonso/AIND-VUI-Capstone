@@ -41,7 +41,8 @@ def train_model(input_to_softmax,
                 epochs=20,
                 verbose=1,
                 sort_by_duration=False,
-                max_duration=10.0):
+                max_duration=10.0,
+                callbacks=[]):
     
     # create a class instance for obtaining batches of data
     audio_gen = AudioGenerator(minibatch_size=minibatch_size, 
@@ -71,9 +72,13 @@ def train_model(input_to_softmax,
     checkpointer = ModelCheckpoint(filepath='results/'+save_model_path, verbose=0)
 
     # train the model
-    hist = model.fit_generator(generator=audio_gen.next_train(), steps_per_epoch=steps_per_epoch,
-        epochs=epochs, validation_data=audio_gen.next_valid(), validation_steps=validation_steps,
-        callbacks=[checkpointer], verbose=verbose)
+    hist = model.fit_generator(generator=audio_gen.next_train(), 
+                               steps_per_epoch=steps_per_epoch,
+                               epochs=epochs, 
+                               validation_data=audio_gen.next_valid(), 
+                               validation_steps=validation_steps,
+                               callbacks=[checkpointer]+callbacks, 
+                               verbose=verbose)
 
     # save model loss
     with open('results/'+pickle_path, 'wb') as f:
